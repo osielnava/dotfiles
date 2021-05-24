@@ -1,12 +1,12 @@
 set expandtab
 set guicursor=
 set noshowmatch
-set relativenumber
+"set relativenumber
 set nohlsearch
 set hidden
 set noerrorbells
 set smartindent
-set nu
+"set nu
 set nowrap
 set smartcase
 set noswapfile
