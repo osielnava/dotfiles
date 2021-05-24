@@ -83,3 +83,15 @@
 
 
 (setq doom-theme 'doom-one-light)
+
+(setq frame-title-format
+    '(""
+      (:eval
+       (if (s-contains-p org-roam-directory (or buffer-file-name ""))
+           (replace-regexp-in-string ".*/[0-9]*-?" "🢔 " buffer-file-name)
+         "%b"))
+      (:eval
+       (let ((project-name (projectile-project-name)))
+         (unless (string= "-" project-name)
+           (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s - emacs") project-name))))))
+
