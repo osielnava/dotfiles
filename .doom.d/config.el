@@ -78,7 +78,7 @@
       doom-unicode-font (font-spec :family "Cascadia Code" :size 12)
       doom-big-font (font-spec :family "Cascadia Code" :size 19))
 
-(setq doom-theme 'doom-gruvbox)
+;;(setq doom-theme 'doom-gruvbox)
 (setq require-final-newline t)
 
 
