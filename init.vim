@@ -6,7 +6,7 @@ set nohlsearch
 set hidden
 set noerrorbells
 set smartindent
-set nu
+"set nu
 set nowrap
 set smartcase
 set noswapfile
