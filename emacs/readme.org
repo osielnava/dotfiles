@@ -89,10 +89,10 @@
 #+END_SRC
 ** Themes
 #+BEGIN_SRC emacs-lisp
-  (use-package gruvbox-theme
-    :ensure t
-    :config
-    (load-theme 'gruvbox t))
+  ;; (use-package gruvbox-theme
+  ;;   :ensure t
+  ;;   :config
+  ;;   (load-theme 'gruvbox t))
 #+END_SRC
 * Which-key
 #+BEGIN_SRC emacs-lisp

@@ -29,7 +29,8 @@ There are two things you can do about this warning:
 (package-install 'use-package))
 
 (org-babel-load-file (expand-file-name "~/.emacs.d/readme.org"))
-
+(setq geiser-mit-binary "/usr/bin/scheme")
+(setq geiser-active-implementations '(mit))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -40,7 +41,7 @@ There are two things you can do about this warning:
  '(menu-bar-mode nil)
  '(org-agenda-files '("~/org/work.org" "~/org/school.org" "~/org/home.org"))
  '(package-selected-packages
-   '(prettier-js org-roam company-lsp geiser elixir-yasnippets zzz-to-char racket-mode company exec-path-from-shell which-key use-package try counsel avy))
+   '(geiser-mit prettier-js org-roam company-lsp geiser elixir-yasnippets zzz-to-char racket-mode company exec-path-from-shell which-key use-package try counsel avy))
  '(show-paren-mode t)
  '(tool-bar-mode nil))
 (custom-set-faces
@@ -48,4 +49,4 @@ There are two things you can do about this warning:
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Hack" :foundry "SRC" :slant normal :weight normal :height 113 :width normal)))))
+ '(default ((t (:family "Cascadia Code" :foundry "SAJA" :slant normal :weight normal :height 113 :width normal)))))
