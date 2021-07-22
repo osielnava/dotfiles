@@ -79,10 +79,10 @@ imap kj <esc>
 if (has("termguicolors"))
  set termguicolors
 endif
-"colorscheme gruvbox
-colorscheme one
-"set background=dark
-set background=light
+colorscheme gruvbox
+" colorscheme one
+set background=dark
+"set background=light
 
 " Integrated Terminal
 " open new split panes to right and below
