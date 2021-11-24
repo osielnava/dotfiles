@@ -52,37 +52,22 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
-(use-package org-super-agenda
-  :after org-agenda
-  :init
-  (setq org-super-agenda-groups '((:name "Today"
-                                  :time-grid t
-                                  :scheduled today)
-                           (:name "Due today"
-                                  :deadline today)
-                           (:name "Important"
-                                  :priority "A")
-                           (:name "Overdue"
-                                  :deadline past)
-                           (:name "Due soon"
-                                  :deadline future)
-                           (:name "Big Outcomes"
-                            :tag "bo")))
-  :config
-  (org-super-agenda-mode)
-  )
 
 ;;; Add to ~/.doom.d/config.el
-(setq doom-font (font-spec :family "Cascadia Mono" :size 15 :weight 'Regular)
-      doom-variable-pitch-font (font-spec :family "Cascadia Mono") ; inherits `doom-font''s :size
-      doom-unicode-font (font-spec :family "Cascadia Mono" :size 12)
-      doom-big-font (font-spec :family "Cascadia Mono" :size 19))
+;;(setq doom-font (font-spec :family "Cascadia Mono" :size 15 :weight 'Regular)
+;;      doom-variable-pitch-font (font-spec :family "Cascadia Mono") ; inherits `doom-font''s :size
+;;      doom-unicode-font (font-spec :family "Cascadia Mono" :size 12)
+;;      doom-big-font (font-spec :family "Cascadia Mono" :size 19))
 
-(setq doom-theme 'doom-gruvbox)
+;;(setq doom-theme 'doom-gruvbox)
 (setq require-final-newline t)
 
 
 ;; (setq doom-theme 'doom-one-light)
+(setq doom-font (font-spec :family "Jetbrains Mono" :size 12 :weight 'Regular)
+     doom-variable-pitch-font (font-spec :family "Jetbrains Mono") ; inherits `doom-font''s :size
+     doom-unicode-font (font-spec :family "Jetbrains Mono" :size 12)
+     doom-big-font (font-spec :family "Jetbrains Mono" :size 19))
 
 (setq frame-title-format
     '(""
@@ -95,3 +80,11 @@
          (unless (string= "-" project-name)
            (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s - emacs") project-name))))))
 
+(if (eq system-type 'darwin)
+  ; something for OS X if true
+  ; optional something if not
+  (setq mac-option-modifier       'none
+        ns-option-modifier        'none
+        mac-right-option-modifier 'none
+        ns-right-option-modifier  'none)
+)

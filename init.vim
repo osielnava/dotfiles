@@ -76,13 +76,13 @@ imap jk <esc>
 imap kj <esc>
 
 " COLOR SCHEMES
-if (has("termguicolors"))
- set termguicolors
-endif
+" if (has("termguicolors"))
+"  set termguicolors
+" endif
 colorscheme gruvbox
 " colorscheme one
-set background=dark
-"set background=light
+" set background=dark
+" set background=light
 
 " Integrated Terminal
 " open new split panes to right and below
