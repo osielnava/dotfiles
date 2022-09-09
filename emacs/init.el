@@ -1,36 +1,16 @@
 (require 'package)
-(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-		    (not (gnutls-available-p))))
-       (proto (if no-ssl "http" "https")))
-  (when no-ssl
-    (warn "\
-Your version of Emacs does not support SSL connections,
-which is unsafe because it allows man-in-the-middle attacks.
-There are two things you can do about this warning:
-1. Install an Emacs version that does support SSL and be safe.
-2. Remove this warning from your init file so you won't see it again."))
-  ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
-  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
-  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
-  (when (< emacs-major-version 24)
-    ;; For important compatibility libraries like cl-lib
-    (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")))
-  (add-to-list 'package-archive '("org" . "https://orgmode.org/elpa") t)))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
+;; and `package-pinned-packages`. Most users will not need or want to do this.
+;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
-
-;; Initialize Org-Agenda
-(setq org-agenda-files (list "~/org/work.org"
-                             "~/org/school.org" 
-                             "~/org/home.org"))
 
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
 (package-refresh-contents)
 (package-install 'use-package))
 
-(org-babel-load-file (expand-file-name "~/.emacs.d/readme.org"))
-(setq geiser-mit-binary "/usr/bin/scheme")
-(setq geiser-active-implementations '(mit))
+(org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org"))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -38,9 +18,10 @@ There are two things you can do about this warning:
  ;; If there is more than one, they won't work right.
  '(blink-cursor-mode nil)
  '(column-number-mode t)
+ '(custom-safe-themes
+   '("05626f77b0c8c197c7e4a31d9783c4ec6e351d9624aa28bc15e7f6d6a6ebd926" "735561d82728e28f275802fc875c3a2caf14d06f434604a7516c59d49120b163" "f028e1985041fd072fa9063221ee9c9368a570d26bd6660edbd00052d112e8bb" default))
  '(menu-bar-mode nil)
- '(package-selected-packages
-   '(gruvbox-theme yasnippet-snippets writeroom-mode which-key web-mode use-package undo-tree try projectile org-bullets magit exec-path-from-shell emmet-mode elixir-mode counsel beacon avy))
+ '(package-selected-packages '(dracula-theme ace-window use-package))
  '(show-paren-mode t)
  '(tool-bar-mode nil))
 (custom-set-faces
@@ -48,4 +29,5 @@ There are two things you can do about this warning:
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Cascadia Mono PL" :foundry "SAJA" :slant normal :weight normal :height 120 :width normal)))))
+ '(default ((t (:family "JetBrains Mono" :foundry "outline" :slant normal :weight normal :height 113 :width normal))))
+ '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0)))))

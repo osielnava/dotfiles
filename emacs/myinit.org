@@ -1,29 +1,111 @@
-#+STARTIP: overview
-* Interface tweaks
+* Emacs General Config
+** Interface tweaks
 #+BEGIN_SRC emacs-lisp
-(setq inhibit-startup-message t)
-(tool-bar-mode -1)
-(fset 'yes-or-no-p 'y-or-n-p)
-(global-set-key (kbd "<f5>") 'revert-buffer)
-;;(global-linum-mode t)
-(setq visible-bell 1)
-(menu-bar-mode -1)
-(toggle-scroll-bar -1)
-#+END_SRC
-* try
-#+BEGIN_SRC emacs-lisp
-  (use-package try
-    :ensure t)
-#+END_SRC
+  ;; Do not show message at startup
+  (setq inhibit-startup-message t)
 
-* which-key
+  ;; Hide Toolbar
+  (tool-bar-mode -1)
+
+  ;; Simplify confirmation
+  (fset 'yes-or-no-p 'y-or-n-p)
+
+  ;; Reload buffer
+  (global-set-key (kbd "<f5>") 'revert-buffer)
+
+  ;; Show Line Numbers
+  (global-linum-mode t)
+
+  (setq visible-bell 1)
+
+  ;; Hide Menu Bar
+  (menu-bar-mode -1)
+
+  ;; Hide Scroll Bar
+  (toggle-scroll-bar -1)
+
+  ;; Fix unicode errors
+  (setenv "LANG" "en_US.UTF-8")
+  (setenv "LC_ALL" "en_US.UTF-8")
+  (setenv "LC_CTYPE" "en_US.UTF-8")
+
+  (setq default-directory (expand-file-name "~/"))
+
+  (defvar custom/font-family "JetBrains Mono")
+
+  (when (member custom/font-family (font-family-list))
+    (set-frame-font (format "%s 13" custom/font-family)))
+#+END_SRC
+** Better defaults
 #+BEGIN_SRC emacs-lisp
-  (use-package which-key
+  ;; No message in scratch buffer
+  (setq initial-scratch-message nil)
+
+  ;; Show matching parens
+  (setq show-paren-delay 0)
+  (show-paren-mode 1)
+
+  ;; Always display line and column numbers
+  (setq line-number-mode t)
+  (setq column-number-mode t)
+
+  ;; Wrap lines at 80 characters wide, not 72
+  (setq fill-column 80)
+
+  ;; Change Cursor
+  (setq-default cursor-type 'box)
+  (blink-cursor-mode -1)
+
+  ;; Write backup files to their own directory
+  (setq backup-directory-alist
+	`(("." . ,(expand-file-name
+		   (concat user-emacs-directory "backups")))))
+
+  ;; Don't write lock-files, I'm the only one here
+  (setq create-lockfiles nil)
+
+  ;; Show a marker when the line has empty characters at the end
+  (setq-default show-trailing-whitespace t)
+#+END_SRC
+** Improvements
+#+BEGIN_SRC emacs-lisp
+  ;; Window Navigation
+  (bind-key "M-o" 'other-window)
+
+  ;; Window resizing
+  (bind-key "M-s-<left>" 'shrink-window-horizontally)
+  (bind-key "M-s-<right>" 'enlarge-window-horizontally)
+  (bind-key "M-s-<down>" 'shrink-window)
+  (bind-key "M-s-<up>" 'enlarge-window)
+
+  ;; Window splitting
+  (bind-key "M-0" 'delete-window)
+  (bind-key "M-1" 'delete-other-windows)
+  (bind-key "M-2" 'split-window-vertically)
+  (bind-key "M-3" 'split-window-horizontally)
+  (bind-key "M-=" 'balance-windows)
+
+  ;; Navigate through buffers
+  (global-set-key (kbd "M-[") 'previous-buffer)
+  (global-set-key (kbd "M-]") 'next-buffer)
+
+  ;; Set EOL
+  (setq require-final-newline t)
+#+END_SRC
+** Themes
+#+BEGIN_SRC emacs-lisp
+  (use-package dracula-theme
     :ensure t
     :config
-    (which-key-mode))
+    (load-theme 'dracula t))
 #+END_SRC
-
+* Which-key
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+      :ensure t
+      :config
+      (which-key-mode))
+#+END_SRC
 * org-mode
 #+BEGIN_SRC emacs-lisp
   (use-package org-bullets
@@ -39,18 +121,6 @@
 
 (defalias 'list-buffers 'ibuffer-other-window) ; make ibuffer default
 
-#+END_SRC
-* ace-window
-#+BEGIN_SRC emacs-lisp
-  (use-package ace-window
-    :ensure t
-    :init
-    (progn
-      (global-set-key [remap other-window] 'ace-window)
-      (custom-set-faces
-       '(aw-leading-char-face
-	 ((t (:inherit ace-jump-face-foreground :height 3.0)))))
-      ))
 #+END_SRC
 * swiper /ivy /counsel
 #+BEGIN_SRC emacs-lisp
@@ -147,7 +217,46 @@
   (use-package elixir-mode
     :ensure t
     :bind (:map elixir-mode-map
+		("C-c C-t" . 'my/mix-run-test-at-point)
 		("C-c C-f" . elixir-format)))
+
+  (defun my/mix-run-test (&optional scope)
+    "Run elixir test for the given SCOPE."
+    (interactive)
+    (let* ((current-file (buffer-file-name))
+	   (current-line (line-number-at-pos))
+	   (possible-mix-paths `(,(concat (my/project-root) "mix.exs")
+				 ,(concat (my/project-root) "src/mix.exs")))
+	   (mix-file (car (seq-filter 'file-exists-p possible-mix-paths)))
+	   (default-directory (file-name-directory mix-file))
+	   (extra-env (if (boundp 'elixir-extra-test-env) elixir-extra-test-env ""))
+	   (mix-env (concat "MIX_ENV=test " extra-env)))
+
+      (cond
+       ((string-equal scope "file")
+	(compile (format "%s mix test %s" mix-env current-file)))
+
+       ((string-equal scope "at-point")
+	(compile (format "%s mix test %s:%s" mix-env current-file current-line)))
+
+       (t
+	(compile (format "%s mix test" mix-env))))))
+
+
+  (defun my/mix-run-test-file ()
+    "Run mix test over the current file."
+    (interactive)
+    (my/mix-run-test "file"))
+
+  (defun my/mix-run-test-at-point ()
+    "Run mix test at point."
+    (interactive)
+    (my/mix-run-test "at-point"))
+
+  (defun my/mix-run-test-all ()
+    "Run mix test at point."
+    (interactive)
+    (my/mix-run-test))
 #+END_SRC
 * Projectile
 #+BEGIN_SRC emacs-lisp
@@ -157,18 +266,4 @@
     (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
     (projectile-mode +1))
-#+END_SRC
-* Dumb Jump
-#+BEGIN_SRC emacs-lisp
-  (use-package dumb-jump
-    :bind (("M-g o" . dumb-jump-go-other-window)
-	   ("M-g j" . dumb-jump-go)
-	   ("M-g x" . dumb-jump-go-prefer-external)
-	   ("M-g z" . dumb-jump-go-prefer-external-other-window))
-    :config 
-    ;; (setq dumb-jump-selector 'ivy) ;; (setq dumb-jump-selector 'helm)
-  :init
-  (dumb-jump-mode)
-    :ensure
-  )
 #+END_SRC
