@@ -152,6 +152,10 @@ endif
 "Remove all trailing whitespace by pressing F5
 nnoremap <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 
+" Formatting selected code.
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
 " Prettier
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
@@ -224,3 +228,6 @@ nnoremap <C-V> :vsplit .<CR>
 nnoremap <C-H> :split .<CR>
 " nnoremap <C-Q> :q<CR>
 nnoremap <Leader>q :q<CR>
+
+
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
