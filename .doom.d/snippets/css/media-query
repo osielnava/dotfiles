@@ -1,9 +1,0 @@
-# -*- mode: snippet -*-
-# name: media-query
-# uuid:
-# key: mq
-# condition: t
-# --
-@media (min-width: ${1}) {
-    ${2}
-}
